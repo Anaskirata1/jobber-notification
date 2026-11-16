@@ -1,0 +1,26 @@
+FROM node:22-alpine
+
+# تثبيت Git داخل Docker Image
+RUN apk add --no-cache git
+
+# تحديد مجلد العمل داخل Container
+WORKDIR /app
+
+# نسخ ملفات المشروع
+COPY package.json ./
+COPY tsconfig.json ./
+COPY .npmrc ./
+COPY src ./src
+COPY tools ./tools
+
+# عرض محتويات مجلد العمل
+RUN ls -a
+
+# تثبيت Dependencies و nodemon
+RUN npm install && npm install -g nodemon
+
+# فتح المنفذ
+EXPOSE 4001
+
+# تشغيل المشروع
+CMD ["npm", "run", "dev"]
